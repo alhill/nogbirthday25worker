@@ -1,0 +1,13 @@
+name = "nogbirthday25"
+main = "index.js"
+compatibility_date = "2024-02-12"
+
+[vars]
+AI_MODEL = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
+
+[ai]
+binding = "AI"
+
+[[kv_namespaces]]
+binding = "KV"
+id = "4e81b33a00ce4a98b8827627db490842"
