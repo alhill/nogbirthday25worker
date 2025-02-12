@@ -1,13 +1,24 @@
+const headers = {  
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Accept"
+}
+
 export default {
     async fetch(request, env, ctx) {
         const url = new URL(request.url);
-        
-        if (url.pathname === "/ai") {
+        if(request.method === "OPTIONS") {
+            return new Response(null, { headers })
+        } else if (url.pathname === "/ai") {
             return await handleAIRequest(request, env);
         } else if (url.pathname === "/reset") {
             return await resetConversation(request, env)
+        } else if (url.pathname === "/get-history") {
+            return await getHistory(request, env)
+        } else {
+            return new Response("Not found", { status: 404 });
         }
-        return new Response("Not found", { status: 404 });
     }
 };
 
@@ -65,12 +76,20 @@ async function handleAIRequest(request, env) {
             }
         ]))
 
-        return new Response(JSON.stringify(aiRes.response), {
-            headers: { "Content-Type": "application/json" }
-        });
+        return new Response(JSON.stringify(aiRes.response), { headers });
 
     } catch (error) {
         return new Response(`AI error: ${error.message}`, { status: 500 });
+    }
+}
+
+async function getHistory(request, env) {
+    try{
+        const history = await env.KV.get("history")
+        return new Response(JSON.stringify(history), headers)
+    } catch(err) {
+        console.log(87, err)
+        return new Response("Loading chat history failed", { status: 500 })
     }
 }
 
