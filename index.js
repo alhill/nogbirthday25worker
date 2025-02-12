@@ -96,7 +96,7 @@ async function getHistory(request, env) {
 async function resetConversation(request, env) {
     try{
         await env.KV.put("history", "[]")
-        return new Response("Conversation resetted successfully", { status: 200 })
+        return new Response("Conversation resetted successfully", { headers, status: 200 })
     } catch(err) {
         console.log(err)
         return new Response("Reset failed", { status: 500 })
