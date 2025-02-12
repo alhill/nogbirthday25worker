@@ -86,7 +86,7 @@ async function handleAIRequest(request, env) {
 async function getHistory(request, env) {
     try{
         const history = await env.KV.get("history")
-        return new Response(JSON.stringify(history), headers)
+        return new Response(JSON.stringify(history), { headers })
     } catch(err) {
         console.log(87, err)
         return new Response("Loading chat history failed", { status: 500 })
